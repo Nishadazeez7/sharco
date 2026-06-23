@@ -303,33 +303,55 @@ fetch(API_URL)
 
     document.getElementById("balanceKPI").innerHTML =
         fmt(balance);
+    const monthMap = {};
 
+    data.forEach(row => {
+
+        const date = new Date(row.Date);
+
+        const month = date.toLocaleString('en-US',{
+            month:'short'
+        });
+
+        if(!monthMap[month]){
+            monthMap[month] = {
+                income:0,
+                expense:0
+            };
+        }
+
+        const amount = Number(
+          String(row.Amount || 0)
+          .replace(/,/g,'')
+        );
+
+        if(row.Type === "Income"){
+            monthMap[month].income += amount;
+        }
+
+        if(row.Type === "Expense"){
+            monthMap[month].expense += amount;
+        }
+
+    });
+
+    months = Object.keys(monthMap);
+    monthlyIncome = months.map(m => monthMap[m].income);
+    monthlyExpense = months.map(m => monthMap[m].expense);
+console.log(months);
+console.log(monthlyIncome);
+console.log(monthlyExpense);
+    renderTrendChart();
 })
 .catch(err => {
     console.error(err);
 });
   /* ---------- MONTHLY TREND (from transaction log) ---------- */
-const months = ['Jan','Feb','Mar','Apr','May','Jun'];
-const monthlyExpense = [6500, 72050, 70025, 109974, 202878, 79109];
-const monthlyIncome  = [9300, 104500, 98000, 122200, 219500, 136650];
+let months = [];
+let monthlyIncome = [];
+let monthlyExpense = [];
  
-new Chart(document.getElementById('trendChart'), {
-  type:'line',
-  data:{
-    labels: months,
-    datasets:[
-      {label:'Income', data:monthlyIncome, borderColor:'#7a9b66', backgroundColor:'rgba(122,155,102,0.18)', fill:true, tension:.35, pointRadius:3, borderWidth:2.5},
-      {label:'Expense', data:monthlyExpense, borderColor:'#c1502e', backgroundColor:'rgba(193,80,46,0.14)', fill:true, tension:.35, pointRadius:3, borderWidth:2.5}
-    ]
-  },
-  options:{
-    plugins:{legend:{labels:{boxWidth:12, font:{family:"'IBM Plex Mono'", size:11}}}},
-    scales:{
-      y:{ticks:{callback:v=>'₹'+(v/1000)+'k', font:{family:"'IBM Plex Mono'", size:10}}, grid:{color:'rgba(226,163,59,0.08)'}},
-      x:{grid:{display:false}, ticks:{font:{family:"'IBM Plex Mono'", size:11}}}
-    }
-  }
-});
+
  
 /* ---------- CATEGORY BREAKDOWN ---------- */
 const catLabels = ['Material Purchase','Labour','Rent','Design','Travel','Food & Drinks','Utilities','Other','Rental','Bills/Misc/Health'];
