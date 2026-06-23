@@ -180,22 +180,22 @@
   <div class="kpi-row">
     <div class="kpi income">
       <div class="lbl">Total Income</div>
-      <div class="val">₹6,90,150</div>
+      <div class="val" id="incomeKPI">₹0</div>
       <div class="sub">Across all projects, advances + receipts</div>
     </div>
     <div class="kpi expense">
       <div class="lbl">Total Expense</div>
-      <div class="val">₹5,40,535</div>
+      <div class="val" id="expenseKPI">₹0</div>
       <div class="sub">Material, labour, travel &amp; site costs</div>
     </div>
     <div class="kpi withdrawal">
       <div class="lbl">Partner Withdrawals</div>
-      <div class="val">₹1,40,000</div>
+      <div class="val" id="withdrawalKPI">₹0</div>
       <div class="sub">Profit share drawn — Nishad &amp; Shanid</div>
     </div>
     <div class="kpi balance">
       <div class="lbl">Net Balance</div>
-      <div class="val">₹9,615</div>
+      <div class="val" id="balanceKPI">₹0</div>
       <div class="sub">Cash remaining after withdrawals</div>
     </div>
   </div>
@@ -259,8 +259,56 @@ Chart.defaults.font.family = "'Inter', sans-serif";
 Chart.defaults.borderColor = 'rgba(226,163,59,0.12)';
  
 const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
- 
-/* ---------- MONTHLY TREND (from transaction log) ---------- */
+ const API_URL =
+"https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnS0CHnexFe1x5mKa9vW6sCCLMQx9GhdrSta_XP0VN0uuGe1M1GOf3Hc9vro6UuoERnM2kZIyNRcrcaOiwUKgHroCvlYSvJKwV3fDVVpa4er2fVIFgZPscSWtFa-NuL0YboJ0P1r8UhrY7teSeNTEh1oPKgWUcMh6o0vrUyzlhJ1LoUks3CaVXMZNRJo3jT8HS8JKKs0zu5KM3WBHEVWi7Chm8J8BhIeGuuhnm-ScNzjif-TzMeYAl9YRuKxYf2whM2VrVcbg_QxYstetvuu36X_4Rx6NQ&lib=MfMuKYNM9Ivi2mgRpY5BTGxRbx3UUy86u";
+fetch(API_URL)
+.then(r => r.json())
+.then(data => {
+
+    console.log("Live Data", data);
+
+    let income = 0;
+    let expense = 0;
+    let withdrawal = 0;
+
+    data.forEach(row => {
+
+        const type = String(row.Type || "").trim();
+        const amount = Number(String(row.Amount || 0).replace(/,/g,""));
+
+        if(type === "Income"){
+            income += amount;
+        }
+
+        if(type === "Expense"){
+            expense += amount;
+        }
+
+        if(type === "Withdrawal"){
+            withdrawal += amount;
+        }
+
+    });
+
+    const balance = income - expense - withdrawal;
+
+    document.getElementById("incomeKPI").innerHTML =
+        fmt(income);
+
+    document.getElementById("expenseKPI").innerHTML =
+        fmt(expense);
+
+    document.getElementById("withdrawalKPI").innerHTML =
+        fmt(withdrawal);
+
+    document.getElementById("balanceKPI").innerHTML =
+        fmt(balance);
+
+})
+.catch(err => {
+    console.error(err);
+});
+  /* ---------- MONTHLY TREND (from transaction log) ---------- */
 const months = ['Jan','Feb','Mar','Apr','May','Jun'];
 const monthlyExpense = [6500, 72050, 70025, 109974, 202878, 79109];
 const monthlyIncome  = [9300, 104500, 98000, 122200, 219500, 136650];
