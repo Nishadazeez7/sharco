@@ -316,6 +316,9 @@ let monthlyExpense = [];
   });
 
 }
+  let catLabels = [];
+let catData = [];
+let catChart;
 fetch(API_URL)
 .then(r => r.json())
 .then(data => {
@@ -344,6 +347,7 @@ fetch(API_URL)
         }
 
     });
+  
 
     const balance = income - expense - withdrawal;
 
@@ -397,6 +401,71 @@ console.log(months);
 console.log(monthlyIncome);
 console.log(monthlyExpense);
     renderTrendChart();
+  months = Object.keys(monthMap);
+
+monthlyIncome =
+months.map(m => monthMap[m].income);
+
+monthlyExpense =
+months.map(m => monthMap[m].expense);
+
+renderTrendChart();
+
+let catLabels = [];
+let catData = [];
+let catChart;
+
+function renderCategoryChart(){
+
+ if(catChart){
+   catChart.destroy();
+ }
+
+ catChart = new Chart(
+   document.getElementById('catChart'),
+ {
+   type:'bar',
+   data:{
+      labels:catLabels,
+      datasets:[{
+         data:catData,
+         backgroundColor:'#e2a33b'
+      }]
+   },
+   options:{
+      indexAxis:'y',
+      plugins:{
+         legend:{display:false}
+      }
+   }
+ });
+
+}
+// ===== CATEGORY TOTALS =====
+
+const categoryMap = {};
+
+data.forEach(row => {
+
+    if(row.Type !== "Expense") return;
+
+    const category = row.Category || "Other";
+
+    const amount = parseFloat(row.Amount || 0);
+
+    if(!categoryMap[category]){
+        categoryMap[category] = 0;
+    }
+
+    categoryMap[category] += amount;
+
+});
+
+catLabels = Object.keys(categoryMap);
+
+catData = Object.values(categoryMap);
+
+renderCategoryChart();
 })
 .catch(err => {
     console.error(err);
@@ -407,8 +476,7 @@ console.log(monthlyExpense);
 
  
 /* ---------- CATEGORY BREAKDOWN ---------- */
-const catLabels = ['Material Purchase','Labour','Rent','Design','Travel','Food & Drinks','Utilities','Other','Rental','Bills/Misc/Health'];
-const catData =    [264650, 191074, 24000, 20300, 10719, 10592, 9050, 5270, 1220, 1160];
+
 new Chart(document.getElementById('catChart'), {
   type:'bar',
   data:{
