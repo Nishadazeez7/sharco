@@ -262,6 +262,9 @@ const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
   let months = [];
 let monthlyIncome = [];
 let monthlyExpense = [];
+let catLabels = [];
+let catData = [];
+let catChart;
  const API_URL =
 "https://script.google.com/macros/s/AKfycbx4VvWAeXqNxsmE5trJRslVxlcv5I0PAg6nJUfycBs64z2ZP-7X0JLFw4-wyHpftYj6_g/exec";
   function renderTrendChart(){
@@ -316,9 +319,7 @@ let monthlyExpense = [];
   });
 
 }
-  let catLabels = [];
-let catData = [];
-let catChart;
+  
 fetch(API_URL)
 .then(r => r.json())
 .then(data => {
@@ -401,19 +402,9 @@ console.log(months);
 console.log(monthlyIncome);
 console.log(monthlyExpense);
     renderTrendChart();
-  months = Object.keys(monthMap);
+  
 
-monthlyIncome =
-months.map(m => monthMap[m].income);
 
-monthlyExpense =
-months.map(m => monthMap[m].expense);
-
-renderTrendChart();
-
-let catLabels = [];
-let catData = [];
-let catChart;
 
 function renderCategoryChart(){
 
@@ -477,26 +468,7 @@ renderCategoryChart();
  
 /* ---------- CATEGORY BREAKDOWN ---------- */
 
-new Chart(document.getElementById('catChart'), {
-  type:'bar',
-  data:{
-    labels: catLabels,
-    datasets:[{
-      data: catData,
-      backgroundColor:'#e2a33b',
-      borderRadius:3,
-      barThickness:14
-    }]
-  },
-  options:{
-    indexAxis:'y',
-    plugins:{legend:{display:false}},
-    scales:{
-      x:{ticks:{callback:v=>'₹'+(v/1000)+'k', font:{family:"'IBM Plex Mono'", size:10}}, grid:{color:'rgba(226,163,59,0.08)'}},
-      y:{grid:{display:false}, ticks:{font:{size:11}}}
-    }
-  }
-});
+
  
 /* ---------- PROJECT DATA (authoritative pivot) ---------- */
 const projects = [
