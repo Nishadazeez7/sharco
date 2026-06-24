@@ -260,7 +260,7 @@ Chart.defaults.borderColor = 'rgba(226,163,59,0.12)';
  
 const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
  const API_URL =
-"https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnS0CHnexFe1x5mKa9vW6sCCLMQx9GhdrSta_XP0VN0uuGe1M1GOf3Hc9vro6UuoERnM2kZIyNRcrcaOiwUKgHroCvlYSvJKwV3fDVVpa4er2fVIFgZPscSWtFa-NuL0YboJ0P1r8UhrY7teSeNTEh1oPKgWUcMh6o0vrUyzlhJ1LoUks3CaVXMZNRJo3jT8HS8JKKs0zu5KM3WBHEVWi7Chm8J8BhIeGuuhnm-ScNzjif-TzMeYAl9YRuKxYf2whM2VrVcbg_QxYstetvuu36X_4Rx6NQ&lib=MfMuKYNM9Ivi2mgRpY5BTGxRbx3UUy86u";
+"https://script.google.com/macros/s/AKfycbx4VvWAeXqNxsmE5trJRslVxlcv5I0PAg6nJUfycBs64z2ZP-7X0JLFw4-wyHpftYj6_g/exec";
 fetch(API_URL)
 .then(r => r.json())
 .then(data => {
@@ -341,7 +341,7 @@ fetch(API_URL)
 console.log(months);
 console.log(monthlyIncome);
 console.log(monthlyExpense);
-    renderTrendChart();
+    function renderTrendChart();
 })
 .catch(err => {
     console.error(err);
