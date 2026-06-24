@@ -259,8 +259,63 @@ Chart.defaults.font.family = "'Inter', sans-serif";
 Chart.defaults.borderColor = 'rgba(226,163,59,0.12)';
  
 const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+  let months = [];
+let monthlyIncome = [];
+let monthlyExpense = [];
  const API_URL =
 "https://script.google.com/macros/s/AKfycbx4VvWAeXqNxsmE5trJRslVxlcv5I0PAg6nJUfycBs64z2ZP-7X0JLFw4-wyHpftYj6_g/exec";
+  function renderTrendChart(){
+
+  new Chart(document.getElementById('trendChart'), {
+    type:'line',
+    data:{
+      labels:months,
+      datasets:[
+        {
+          label:'Income',
+          data:monthlyIncome,
+          borderColor:'#7a9b66',
+          backgroundColor:'rgba(122,155,102,0.18)',
+          fill:true,
+          tension:.35,
+          pointRadius:3,
+          borderWidth:2.5
+        },
+        {
+          label:'Expense',
+          data:monthlyExpense,
+          borderColor:'#c1502e',
+          backgroundColor:'rgba(193,80,46,0.14)',
+          fill:true,
+          tension:.35,
+          pointRadius:3,
+          borderWidth:2.5
+        }
+      ]
+    },
+    options:{
+      plugins:{
+        legend:{
+          labels:{
+            boxWidth:12,
+            font:{
+              family:"'IBM Plex Mono'",
+              size:11
+            }
+          }
+        }
+      },
+      scales:{
+        y:{
+          ticks:{
+            callback:v=>'₹'+(v/1000)+'k'
+          }
+        }
+      }
+    }
+  });
+
+}
 fetch(API_URL)
 .then(r => r.json())
 .then(data => {
@@ -341,15 +396,13 @@ fetch(API_URL)
 console.log(months);
 console.log(monthlyIncome);
 console.log(monthlyExpense);
-    function renderTrendChart();
+    renderTrendChart();
 })
 .catch(err => {
     console.error(err);
 });
   /* ---------- MONTHLY TREND (from transaction log) ---------- */
-let months = [];
-let monthlyIncome = [];
-let monthlyExpense = [];
+
  
 
  
