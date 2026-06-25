@@ -470,7 +470,7 @@ data.forEach(row => {
     projectMap[project] = {
       income:0,
       expense:0,
-      withdrawal:0
+   
     };
   }
 
@@ -484,9 +484,9 @@ data.forEach(row => {
     projectMap[project].expense += amount;
   }
 
-  if(row.Type === "Withdrawal"){
+ /* if(row.Type === "Withdrawal"){
     projectMap[project].withdrawal += amount;
-  }
+  }*/
 
 });
 
@@ -499,11 +499,10 @@ const liveProjects = Object.keys(projectMap)
     name: project,
     income: p.income,
     expense: p.expense,
-    withdrawal: p.withdrawal,
     profit:
       p.income -
-      p.expense -
-      p.withdrawal
+      p.expense
+     
 };
 
 })
