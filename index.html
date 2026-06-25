@@ -215,7 +215,7 @@
   <div class="section-label">Project Performance</div>
   <div class="grid-2">
     <div class="panel">
-      <h3>Profit / Loss by Project <small>Income − Expense − Withdrawal</small></h3>
+      <h3>Profit / Loss by Project <small>Income − Expense</small></h3>
       <canvas id="projChart" height="260"></canvas>
     </div>
     <div class="panel">
@@ -674,8 +674,8 @@ data.forEach(row => {
 
         subProjectMap[key] = {
             income:0,
-            expense:0,
-            withdrawal:0
+            expense:0
+            
         };
 
     }
@@ -689,10 +689,6 @@ data.forEach(row => {
 
     if(row.Type === "Expense"){
         subProjectMap[key].expense += amount;
-    }
-
-    if(row.Type === "Withdrawal"){
-        subProjectMap[key].withdrawal += amount;
     }
 
 });
