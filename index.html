@@ -158,7 +158,9 @@
     font-family:'IBM Plex Mono'; font-size:11px; color:var(--steel);
     display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
   }
- 
+ .panel canvas{
+    height:200px !important;
+}
   @media (max-width: 900px){
     .kpi-row{grid-template-columns:repeat(2,1fr);}
     .grid-2{grid-template-columns:1fr;}
@@ -204,11 +206,11 @@
   <div class="grid-2">
     <div class="panel">
       <h3>Monthly Income vs Expense <small>₹ per month, Jan–Jun 2026</small></h3>
-      <canvas id="trendChart" height="230"></canvas>
+      <canvas id="trendChart" height="200"></canvas>
     </div>
     <div class="panel">
       <h3>Where Money Goes <small>Expense by category</small></h3>
-      <canvas id="catChart" height="230"></canvas>
+      <canvas id="catChart" height="200"></canvas>
     </div>
   </div>
  
@@ -297,6 +299,13 @@ let catChart;
       ]
     },
     options:{
+      maintainAspectRatio:false,
+      layout:{
+        padding:{
+          top:5,
+          bottom:5
+        }
+      },
       plugins:{
         legend:{
           labels:{
@@ -419,16 +428,38 @@ function renderCategoryChart(){
    data:{
       labels:catLabels,
       datasets:[{
-         data:catData,
-         backgroundColor:'#e2a33b'
-      }]
+   data:catData,
+   backgroundColor:'#e2a33b',
+   barPercentage:0.7,
+   categoryPercentage:0.8
+}]
    },
    options:{
-      indexAxis:'y',
-      plugins:{
-         legend:{display:false}
+   indexAxis:'y',
+   maintainAspectRatio:false,
+   layout:{
+      padding:{
+         top:5,
+         bottom:5
+      }
+   },
+   plugins:{
+      legend:{display:false}
+   },
+   scales:{
+      x:{
+         beginAtZero:true,
+         ticks:{
+            maxTicksLimit:5
+         }
+      },
+      y:{
+         ticks:{
+            autoSkip:false
+         }
       }
    }
+}
  });
 
 }
