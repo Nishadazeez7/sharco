@@ -730,6 +730,101 @@ subSorted.forEach(s => {
     `;
 
 });
+  // ===== RECENT ACTIVITY =====
+
+const recentRows = [...data]
+.sort((a,b) =>
+  new Date(b.Date) - new Date(a.Date)
+)
+.slice(0,12);
+
+const feed =
+document.getElementById('feed');
+
+feed.innerHTML = '';
+
+const pillLabel = {
+  Expense:'EXP',
+  Income:'INC',
+  Withdrawal:'WD'
+};
+
+recentRows.forEach(row => {
+
+  const type =
+    row.Type || '';
+
+  const amount =
+    Number(row.Amount || 0);
+
+  const project =
+    row["Project Name"] || '';
+
+  const desc =
+    row.Description ||
+    row.Category ||
+    '-';
+
+  const dateObj =
+    new Date(row.Date);
+
+  const date =
+    dateObj.toLocaleDateString(
+      'en-IN',
+      {
+        day:'2-digit',
+        month:'short'
+      }
+    );
+
+  const cssClass =
+    type === 'Expense'
+    ? 'exp'
+    : type === 'Income'
+    ? 'inc'
+    : 'wd';
+
+  feed.innerHTML += `
+  <div class="feed-row">
+
+    <div class="date">
+      ${date}
+    </div>
+
+    <div>
+      <div class="desc">
+        ${desc}
+      </div>
+
+      <div class="meta">
+        <span class="pill ${cssClass}">
+          ${pillLabel[type]}
+        </span>
+        &nbsp;
+        ${project}
+      </div>
+    </div>
+
+    <div class="amt ${
+      type === 'Expense'
+      ? 'neg'
+      : 'pos'
+    }">
+
+      ${
+        type === 'Expense'
+        ? '-'
+        : '+'
+      }
+
+      ${fmt(amount)}
+
+    </div>
+
+  </div>
+  `;
+
+});
   })
 .catch(err => {
    console.error(err);
@@ -829,7 +924,7 @@ subSorted.forEach(s=>{
 });*/
  
 /* ---------- RECENT ACTIVITY ---------- */
-const recent = [
+/*const recent = [
   {date:'Jun 18', proj:'Sharco', type:'wd', desc:'Profit share — Nishad', amt:33000},
   {date:'Jun 18', proj:'Sharco', type:'wd', desc:'Profit share — Nishad', amt:15000},
   {date:'Jun 17', proj:'Caliph', type:'exp', desc:'Misc — Wadood', amt:500},
@@ -854,7 +949,7 @@ recent.forEach(r=>{
     </div>
     <div class="amt ${r.type==='exp'?'neg':'pos'}">${r.type==='exp'?'−':'+'}${fmt(r.amt)}</div>
   </div>`;
-});
+});*/
 </script>
 </body>
 </html>
