@@ -580,10 +580,17 @@ new Chart(document.getElementById('projChart'), {
   },
   options:{
     indexAxis:'y',
+    maintainAspectRatio:false,
     plugins:{
-      legend:{display:false}
+        legend:{display:false}
+    },
+    scales:{
+        x:{
+            beginAtZero:true,
+            grace:'5%'
+        }
     }
-  }
+}
 });
 // ===== PARTNER SETTLEMENT =====
 
