@@ -510,7 +510,29 @@ const liveProjects = Object.keys(projectMap)
 .sort((a,b)=>b.profit-a.profit);
 
 console.log("Live Projects", liveProjects);
-  
+ // ===== LIVE PROJECT LEDGER =====
+
+const projTableBody =
+document.getElementById('projTable');
+
+projTableBody.innerHTML = '';
+
+liveProjects.forEach(p => {
+
+  projTableBody.innerHTML += `
+    <tr>
+      <td class="name">${p.name}</td>
+      <td class="num">${fmt(p.expense)}</td>
+      <td class="num">${fmt(p.income)}</td>
+      <td class="num ${
+        p.profit >= 0 ? 'pos' : 'neg'
+      }">
+        ${fmt(p.profit)}
+      </td>
+    </tr>
+  `;
+
+}); 
 
 new Chart(document.getElementById('projChart'), {
   type:'bar',
