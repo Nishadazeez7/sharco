@@ -655,6 +655,87 @@ Object.keys(partnerMap).forEach(name => {
 `;
 
 });
+  // ===== SUB PROJECT SUMMARY =====
+
+const subProjectMap = {};
+
+data.forEach(row => {
+
+    const project =
+      row["Project Name"] || "";
+
+    const sub =
+      row["Sub Project"] || "";
+
+    if(!sub) return;
+
+    const key = `${project} (${sub})`;
+
+    if(!subProjectMap[key]){
+
+        subProjectMap[key] = {
+            income:0,
+            expense:0,
+            withdrawal:0
+        };
+
+    }
+
+    const amount =
+      Number(row.Amount || 0);
+
+    if(row.Type === "Income"){
+        subProjectMap[key].income += amount;
+    }
+
+    if(row.Type === "Expense"){
+        subProjectMap[key].expense += amount;
+    }
+
+    if(row.Type === "Withdrawal"){
+        subProjectMap[key].withdrawal += amount;
+    }
+
+});
+  const subSorted =
+Object.keys(subProjectMap)
+.map(name => {
+
+    const s = subProjectMap[name];
+
+    return {
+        name,
+        income:s.income,
+        expense:s.expense,
+        profit:
+          s.income -
+          s.expense -
+          s.withdrawal
+    };
+
+})
+.sort((a,b)=>b.profit-a.profit)
+.slice(0,10);const subTableBody =
+document.getElementById('subTable');
+
+subTableBody.innerHTML = '';
+
+subSorted.forEach(s => {
+
+    subTableBody.innerHTML += `
+    <tr>
+      <td class="name">${s.name}</td>
+      <td class="num">${fmt(s.expense)}</td>
+      <td class="num">${fmt(s.income)}</td>
+      <td class="num ${
+        s.profit >= 0 ? 'pos' : 'neg'
+      }">
+        ${fmt(s.profit)}
+      </td>
+    </tr>
+    `;
+
+});
   })
 .catch(err => {
    console.error(err);
@@ -734,7 +815,7 @@ partners.forEach(p=>{
 });
  */
 /* ---------- SUB-PROJECTS ---------- */
-const subs = [
+/*const subs = [
   {name:'Office (Caliph)', expense:257336.90, income:333150.00, profit:75813.10},
   {name:'Flooring', expense:85359.00, income:122200.00, profit:36841.00},
   {name:'Bedroom (Poonoor)', expense:138495.53, income:175000.00, profit:36504.47},
@@ -751,7 +832,7 @@ subSorted.forEach(s=>{
     <td class="num">${fmt(s.income)}</td>
     <td class="num ${s.profit>=0?'pos':'neg'}">${s.profit>=0?'':'−'}${fmt(Math.abs(s.profit))}</td>
   </tr>`;
-});
+});*/
  
 /* ---------- RECENT ACTIVITY ---------- */
 const recent = [
