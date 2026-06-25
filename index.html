@@ -457,6 +457,78 @@ catLabels = Object.keys(categoryMap);
 catData = Object.values(categoryMap);
 
 renderCategoryChart();
+  // ===== LIVE PROJECT PROFIT CHART =====
+
+const projectMap = {};
+
+data.forEach(row => {
+
+  const project =
+    row["Project Name"] || "Unknown";
+
+  if(!projectMap[project]){
+    projectMap[project] = {
+      income:0,
+      expense:0,
+      withdrawal:0
+    };
+  }
+
+  const amount = Number(row.Amount || 0);
+
+  if(row.Type === "Income"){
+    projectMap[project].income += amount;
+  }
+
+  if(row.Type === "Expense"){
+    projectMap[project].expense += amount;
+  }
+
+  if(row.Type === "Withdrawal"){
+    projectMap[project].withdrawal += amount;
+  }
+
+});
+
+const liveProjects = Object.keys(projectMap)
+.map(project => {
+
+  const p = projectMap[project];
+
+  return {
+    name: project,
+    profit:
+      p.income -
+      p.expense -
+      p.withdrawal
+  };
+
+})
+.sort((a,b)=>b.profit-a.profit);
+
+console.log("Live Projects", liveProjects);
+
+new Chart(document.getElementById('projChart'), {
+  type:'bar',
+  data:{
+    labels: liveProjects.map(p=>p.name),
+    datasets:[{
+      data: liveProjects.map(p=>p.profit),
+      backgroundColor:
+        liveProjects.map(
+          p => p.profit >= 0
+          ? '#7a9b66'
+          : '#c1502e'
+        )
+    }]
+  },
+  options:{
+    indexAxis:'y',
+    plugins:{
+      legend:{display:false}
+    }
+  }
+});
 })
 .catch(err => {
     console.error(err);
@@ -471,7 +543,7 @@ renderCategoryChart();
 
  
 /* ---------- PROJECT DATA (authoritative pivot) ---------- */
-const projects = [
+/*const projects = [
   {name:"Caliph",      expense:257336.90, income:333150.00, withdrawal:0,       profit:75813.10},
   {name:"Poonoor",     expense:132995.53, income:170000.00, withdrawal:0,       profit:37004.47},
   {name:"MES",         expense:61908.00,  income:96000.00,  withdrawal:0,       profit:34092.00},
@@ -506,7 +578,7 @@ new Chart(document.getElementById('projChart'), {
       y:{grid:{display:false}, ticks:{font:{size:11}}}
     }
   }
-});
+});*/
  
 const projTableBody = document.getElementById('projTable');
 projSorted.forEach(p=>{
