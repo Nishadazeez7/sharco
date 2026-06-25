@@ -497,16 +497,20 @@ const liveProjects = Object.keys(projectMap)
 
   return {
     name: project,
+    income: p.income,
+    expense: p.expense,
+    withdrawal: p.withdrawal,
     profit:
       p.income -
       p.expense -
       p.withdrawal
-  };
+};
 
 })
 .sort((a,b)=>b.profit-a.profit);
 
 console.log("Live Projects", liveProjects);
+  
 
 new Chart(document.getElementById('projChart'), {
   type:'bar',
