@@ -571,10 +571,11 @@ data.forEach(row => {
 
         if(name && !partnerMap[name]){
 
-            partnerMap[name] = {
+     partnerMap[name] = {
     expense:0,
     income:0,
     withdrawn:0,
+    selfWithdrawn:0,
     withdrawalPaid:0
 };
 
@@ -602,27 +603,26 @@ data.forEach(row => {
 
     if(row.Type === "Withdrawal"){
 
-        // receiver
+    // Show in Withdrawn column
+    if(paidTo){
+        partnerMap[paidTo].withdrawn += amount;
+    }
 
-        if(paidTo){
+    // Self withdrawal
+    if(paidBy === paidTo){
 
-            partnerMap[paidTo].withdrawn += amount;
-
-        }
-
-        // payer
-
-        if(
-            paidBy &&
-            paidTo &&
-            paidBy !== paidTo
-        ){
-
-            partnerMap[paidBy].withdrawalPaid += amount;
-
-        }
+        partnerMap[paidTo].selfWithdrawn += amount;
 
     }
+
+    // Paid for another partner
+    else if(paidBy && paidTo){
+
+        partnerMap[paidBy].withdrawalPaid += amount;
+
+    }
+
+}
 
 });
 
@@ -638,7 +638,7 @@ Object.keys(partnerMap).forEach(name => {
     const balance =
       p.income
     - p.expense
-    - p.withdrawn
+    - p.selfWithdrawn
     - p.withdrawalPaid;
 
     partnerTableBody.innerHTML += `
