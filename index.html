@@ -555,23 +555,15 @@ new Chart(document.getElementById('projChart'), {
     }
   }
 });
-})
-   // ===== PARTNER SETTLEMENT =====
+  // ===== PARTNER SETTLEMENT =====
 
 const partnerMap = {};
 
 data.forEach(row => {
 
-    const paidBy =
-      row["Paid By"] || "";
-
-    const paidTo =
-      row["Paid to"] || "";
-
-    const amount =
-      Number(row.Amount || 0);
-
-    // create partner records
+    const paidBy = row["Paid By"] || "";
+    const paidTo = row["Paid to"] || "";
+    const amount = Number(row.Amount || 0);
 
     if(paidBy && !partnerMap[paidBy]){
         partnerMap[paidBy] = {
@@ -589,26 +581,21 @@ data.forEach(row => {
         };
     }
 
-    // expenses paid
-
     if(row.Type === "Expense" && paidBy){
         partnerMap[paidBy].expense += amount;
     }
 
-    // income brought
-
     if(row.Type === "Income" && paidBy){
         partnerMap[paidBy].income += amount;
     }
-
-    // withdrawals received
 
     if(row.Type === "Withdrawal" && paidTo){
         partnerMap[paidTo].withdrawn += amount;
     }
 
 });
-  const partnerTableBody =
+
+const partnerTableBody =
 document.getElementById('partnerTable');
 
 partnerTableBody.innerHTML = '';
@@ -628,18 +615,18 @@ Object.keys(partnerMap).forEach(name => {
         <td class="num">${fmt(p.expense)}</td>
         <td class="num">${fmt(p.income)}</td>
         <td class="num">${fmt(p.withdrawn)}</td>
-        <td class="num ${
-            balance >= 0 ? 'pos' : 'neg'
-        }">
+        <td class="num ${balance >= 0 ? 'pos' : 'neg'}">
             ${fmt(balance)}
         </td>
       </tr>
     `;
 
 });
+  })
 .catch(err => {
-    console.error(err);
+   console.error(err);
 });
+
   /* ---------- MONTHLY TREND (from transaction log) ---------- */
 
  
@@ -696,87 +683,7 @@ projSorted.forEach(p=>{
     <td class="num ${p.profit>=0?'pos':'neg'}">${p.profit>=0?'':'−'}${fmt(Math.abs(p.profit))}</td>
   </tr>`;
 });**/
- // ===== PARTNER SETTLEMENT =====
 
-const partnerMap = {};
-
-data.forEach(row => {
-
-    const paidBy =
-      row["Paid By"] || "";
-
-    const paidTo =
-      row["Paid to"] || "";
-
-    const amount =
-      Number(row.Amount || 0);
-
-    // create partner records
-
-    if(paidBy && !partnerMap[paidBy]){
-        partnerMap[paidBy] = {
-            expense:0,
-            income:0,
-            withdrawn:0
-        };
-    }
-
-    if(paidTo && !partnerMap[paidTo]){
-        partnerMap[paidTo] = {
-            expense:0,
-            income:0,
-            withdrawn:0
-        };
-    }
-
-    // expenses paid
-
-    if(row.Type === "Expense" && paidBy){
-        partnerMap[paidBy].expense += amount;
-    }
-
-    // income brought
-
-    if(row.Type === "Income" && paidBy){
-        partnerMap[paidBy].income += amount;
-    }
-
-    // withdrawals received
-
-    if(row.Type === "Withdrawal" && paidTo){
-        partnerMap[paidTo].withdrawn += amount;
-    }
-
-});
-  const partnerTableBody =
-document.getElementById('partnerTable');
-
-partnerTableBody.innerHTML = '';
-
-Object.keys(partnerMap).forEach(name => {
-
-    const p = partnerMap[name];
-
-    const balance =
-      p.income -
-      p.expense -
-      p.withdrawn;
-
-    partnerTableBody.innerHTML += `
-      <tr>
-        <td class="name">${name}</td>
-        <td class="num">${fmt(p.expense)}</td>
-        <td class="num">${fmt(p.income)}</td>
-        <td class="num">${fmt(p.withdrawn)}</td>
-        <td class="num ${
-            balance >= 0 ? 'pos' : 'neg'
-        }">
-            ${fmt(balance)}
-        </td>
-      </tr>
-    `;
-
-});
 /* ---------- PARTNER SETTLEMENT ---------- */
 /*const partners = [
   {name:'Nishad', expense:412626.43, income:529500.00, withdrawn:107000.00, balance:9873.57},
