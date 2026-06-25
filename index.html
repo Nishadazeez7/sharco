@@ -232,7 +232,7 @@
     <div class="panel">
       <h3>Partner Settlement <small>who paid / who holds balance</small></h3>
       <table>
-        <thead><tr><th>Partner</th><th class="num">Expense</th><th class="num">Income</th><th class="num">Withdrawn</th><th class="num">Balance</th></tr></thead>
+        <thead><tr><th>Partner</th><th class="num">Expense</th><th class="num">Income</th><th class="num">Withdrawn</th><th class="num">Paid For Others</th><th class="num">Balance</th></tr></thead>
         <tbody id="partnerTable"></tbody>
       </table>
       <h3 style="margin-top:22px;">Top Sub-Projects by Profit <small>work-package level</small></h3>
@@ -555,7 +555,7 @@ new Chart(document.getElementById('projChart'), {
     }
   }
 });
-  // ===== PARTNER SETTLEMENT =====
+// ===== PARTNER SETTLEMENT =====
 
 const partnerMap = {};
 
@@ -565,32 +565,63 @@ data.forEach(row => {
     const paidTo = row["Paid to"] || "";
     const amount = Number(row.Amount || 0);
 
-    if(paidBy && !partnerMap[paidBy]){
-        partnerMap[paidBy] = {
-            expense:0,
-            income:0,
-            withdrawn:0
-        };
-    }
+    // Create partner records
 
-    if(paidTo && !partnerMap[paidTo]){
-        partnerMap[paidTo] = {
-            expense:0,
-            income:0,
-            withdrawn:0
-        };
-    }
+    [paidBy, paidTo].forEach(name => {
+
+        if(name && !partnerMap[name]){
+
+            partnerMap[name] = {
+    expense:0,
+    income:0,
+    withdrawn:0,
+    withdrawalPaid:0
+};
+
+        }
+
+    });
+
+    // Expense
 
     if(row.Type === "Expense" && paidBy){
+
         partnerMap[paidBy].expense += amount;
+
     }
+
+    // Income
 
     if(row.Type === "Income" && paidBy){
+
         partnerMap[paidBy].income += amount;
+
     }
 
-    if(row.Type === "Withdrawal" && paidTo){
-        partnerMap[paidTo].withdrawn += amount;
+    // Withdrawal
+
+    if(row.Type === "Withdrawal"){
+
+        // receiver
+
+        if(paidTo){
+
+            partnerMap[paidTo].withdrawn += amount;
+
+        }
+
+        // payer
+
+        if(
+            paidBy &&
+            paidTo &&
+            paidBy !== paidTo
+        ){
+
+            partnerMap[paidBy].withdrawalPaid += amount;
+
+        }
+
     }
 
 });
@@ -605,21 +636,23 @@ Object.keys(partnerMap).forEach(name => {
     const p = partnerMap[name];
 
     const balance =
-      p.income -
-      p.expense -
-      p.withdrawn;
+      p.income
+    - p.expense
+    - p.withdrawn
+    - p.withdrawalPaid;
 
     partnerTableBody.innerHTML += `
-      <tr>
-        <td class="name">${name}</td>
-        <td class="num">${fmt(p.expense)}</td>
-        <td class="num">${fmt(p.income)}</td>
-        <td class="num">${fmt(p.withdrawn)}</td>
-        <td class="num ${balance >= 0 ? 'pos' : 'neg'}">
-            ${fmt(balance)}
-        </td>
-      </tr>
-    `;
+<tr>
+  <td class="name">${name}</td>
+  <td class="num">${fmt(p.expense)}</td>
+  <td class="num">${fmt(p.income)}</td>
+  <td class="num">${fmt(p.withdrawn)}</td>
+  <td class="num">${fmt(p.withdrawalPaid)}</td>
+  <td class="num ${balance >= 0 ? 'pos' : 'neg'}">
+      ${fmt(balance)}
+  </td>
+</tr>
+`;
 
 });
   })
