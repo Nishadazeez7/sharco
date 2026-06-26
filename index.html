@@ -177,7 +177,9 @@
  
   <div class="titleblock">
     <div>
-      <div class="eyebrow">Multi-Project Cash Book · Jan – Jun 2026</div>
+      <div class="eyebrow" id="periodLabel">
+    Multi-Project Cash Book
+</div>
       <h1>Site <span>Ledger</span></h1>
     </div>
     <div class="stamp">
@@ -420,6 +422,29 @@ fetch(API_URL)
 console.log(months);
 console.log(monthlyIncome);
 console.log(monthlyExpense);
+  const dates = data
+  .map(r => new Date(r.Date))
+  .filter(d => !isNaN(d));
+
+const minDate = new Date(
+  Math.min(...dates)
+);
+
+const maxDate = new Date(
+  Math.max(...dates)
+);
+
+const monthNames = [
+'Jan','Feb','Mar','Apr','May','Jun',
+'Jul','Aug','Sep','Oct','Nov','Dec'
+];
+
+document.getElementById('periodLabel').textContent =
+`Multi-Project Cash Book · ${
+monthNames[minDate.getMonth()]
+} ${minDate.getFullYear()} – ${
+monthNames[maxDate.getMonth()]
+} ${maxDate.getFullYear()}`;
     renderTrendChart();
   
 
