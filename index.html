@@ -584,19 +584,20 @@ new Chart(document.getElementById('projChart'), {
           ? '#7a9b66'
           : '#c1502e'
         ),
-    barPercentage:1,
-    categoryPercentage:1
+    barPercentage:0.75,
+    categoryPercentage:0.75
 }]
   },
   options:{
     responsive:true,
-    maintainAspectRatio:false,
+    maintainAspectRatio:true,
+    aspectRatio:2,
 
     indexAxis:'y',
 
     layout:{
         padding:{
-            left:80,
+            left:50,
             right:10,
             top:5,
             bottom:5
@@ -622,7 +623,7 @@ new Chart(document.getElementById('projChart'), {
                 autoSkip:false,
                 padding:10,
                 font:{
-                    size:14,
+                    size:12,
                     family:"'IBM Plex Mono'"
                 }
             }
