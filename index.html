@@ -161,7 +161,9 @@
 /* .panel canvas{
     height:200px !important;
 }*/
-
+#projChart{
+    height:520px !important;
+}
 
   @media (max-width: 900px){
     .kpi-row{grid-template-columns:repeat(2,1fr);}
@@ -220,7 +222,7 @@
   <div class="grid-2">
     <div class="panel">
       <h3>Profit / Loss by Project <small>Income − Expense</small></h3>
-      <canvas id="projChart" height="260"></canvas>
+      <canvas id="projChart"></canvas>
     </div>
     <div class="panel">
       <h3>Project Ledger <small>sorted by profit</small></h3>
@@ -590,17 +592,16 @@ new Chart(document.getElementById('projChart'), {
   },
   options:{
     responsive:true,
-    maintainAspectRatio:true,
-    aspectRatio:2,
+    maintainAspectRatio:false,
 
     indexAxis:'y',
 
     layout:{
         padding:{
-            left:50,
+            left:35,
             right:10,
-            top:5,
-            bottom:5
+            top:0,
+            bottom:0
         }
     },
 
@@ -621,7 +622,7 @@ new Chart(document.getElementById('projChart'), {
         y:{
             ticks:{
                 autoSkip:false,
-                padding:10,
+                padding:15,
                 font:{
                     size:12,
                     family:"'IBM Plex Mono'"
