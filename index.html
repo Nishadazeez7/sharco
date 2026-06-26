@@ -180,7 +180,10 @@
       <div class="eyebrow">Multi-Project Cash Book · Jan – Jun 2026</div>
       <h1>Site <span>Ledger</span></h1>
     </div>
-    <div class="stamp">RECORDS VERIFIED<b>12 Active Projects</b></div>
+    <div class="stamp">
+    RECORDS VERIFIED
+    <b id="activeProjects">0 Active Projects</b>
+</div>
   </div>
  
   <div class="kpi-row">
@@ -550,6 +553,8 @@ const liveProjects = Object.keys(projectMap)
 .sort((a,b)=>b.profit-a.profit);
 
 console.log("Live Projects", liveProjects);
+  document.getElementById('activeProjects').textContent =
+`${liveProjects.length} Active Projects`;
  // ===== LIVE PROJECT LEDGER =====
 
 const projTableBody =
