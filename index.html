@@ -161,9 +161,8 @@
 /* .panel canvas{
     height:200px !important;
 }*/
-  #projChart{
-    height:420px !important;
-}
+
+
   @media (max-width: 900px){
     .kpi-row{grid-template-columns:repeat(2,1fr);}
     .grid-2{grid-template-columns:1fr;}
@@ -209,11 +208,11 @@
   <div class="grid-2">
     <div class="panel">
       <h3>Monthly Income vs Expense <small>₹ per month, Jan–Jun 2026</small></h3>
-      <canvas id="trendChart" height="290"></canvas>
+      <canvas id="trendChart" height="260"></canvas>
     </div>
     <div class="panel">
       <h3>Where Money Goes <small>Expense by category</small></h3>
-      <canvas id="catChart" height="290"></canvas>
+      <canvas id="catChart" height="260"></canvas>
     </div>
   </div>
  
@@ -221,7 +220,7 @@
   <div class="grid-2">
     <div class="panel">
       <h3>Profit / Loss by Project <small>Income − Expense</small></h3>
-      <canvas id="projChart" height="290"></canvas>
+      <canvas id="projChart" height="260"></canvas>
     </div>
     <div class="panel">
       <h3>Project Ledger <small>sorted by profit</small></h3>
@@ -302,7 +301,10 @@ let catChart;
       ]
     },
     options:{
-      maintainAspectRatio:false,
+      responsive:true,
+    maintainAspectRatio:true,
+    aspectRatio:2,
+      
       layout:{
         padding:{
           top:5,
@@ -438,8 +440,11 @@ function renderCategoryChart(){
 }]
    },
    options:{
+     responsive:true,
+    maintainAspectRatio:true,
+    aspectRatio:1.7,
    indexAxis:'y',
-   maintainAspectRatio:false,
+   
    layout:{
       padding:{
          top:5,
