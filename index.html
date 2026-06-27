@@ -264,7 +264,10 @@
   <div class="section-label">Cash Flow</div>
   <div class="grid-2">
     <div class="panel">
-      <h3>Monthly Income vs Expense <small>₹ per month, Jan–Jun 2026</small></h3>
+      <h3>
+    Monthly Income vs Expense
+    <small id="trendPeriod">₹ per month</small>
+</h3>
       <canvas id="trendChart" height="260"></canvas>
     </div>
     <div class="panel">
@@ -495,6 +498,8 @@ monthNames[minDate.getMonth()]
 } ${minDate.getFullYear()} – ${
 monthNames[maxDate.getMonth()]
 } ${maxDate.getFullYear()}`;
+  document.getElementById('trendPeriod').textContent =
+`₹ per month, ${monthNames[minDate.getMonth()]} ${minDate.getFullYear()} – ${monthNames[maxDate.getMonth()]} ${maxDate.getFullYear()}`;
     renderTrendChart();
   
 
