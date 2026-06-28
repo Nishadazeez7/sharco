@@ -109,7 +109,27 @@
     content:""; flex:1; height:1px;
     background: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 12px);
   }
- 
+ .filter-bar{
+    display:flex;
+    gap:12px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+}
+
+.filter-bar select,
+.filter-bar button{
+    background:var(--panel);
+    color:var(--paper);
+    border:1px solid var(--line-strong);
+    border-radius:4px;
+    padding:8px 12px;
+    font-family:'IBM Plex Mono';
+    font-size:12px;
+}
+
+.filter-bar button{
+    cursor:pointer;
+}
   /* ===== KPI row ===== */
   .kpi-row{
     display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
@@ -237,7 +257,23 @@
     <b id="activeProjects">0 Active Projects</b>
 </div>
   </div>
- 
+ <div class="filter-bar">
+
+  <select id="projectFilter">
+    <option value="All">All Projects</option>
+  </select>
+
+  <select id="dateFilter">
+    <option value="All">All Time</option>
+    <option value="ThisMonth">This Month</option>
+    <option value="ThisYear">This Year</option>
+  </select>
+
+  <button id="resetFilters">
+    Reset
+  </button>
+
+</div>
   <div class="kpi-row">
     <div class="kpi income">
       <div class="lbl">Total Income</div>
@@ -399,7 +435,27 @@ fetch(API_URL)
 .then(data => {
 
     console.log("Live Data", data);
+const projectFilter =
+document.getElementById('projectFilter');
 
+const projects =
+[
+ ...new Set(
+   data.map(
+     r => r["Project Name"]
+   ).filter(Boolean)
+ )
+].sort();
+
+projects.forEach(project => {
+
+ projectFilter.innerHTML += `
+   <option value="${project}">
+     ${project}
+   </option>
+ `;
+
+});
     let income = 0;
     let expense = 0;
     let withdrawal = 0;
