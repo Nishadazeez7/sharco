@@ -362,9 +362,13 @@ const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
 let months = [];
 let monthlyIncome = [];
 let monthlyExpense = [];
+
 let catLabels = [];
 let catData = [];
+
+let trendChart;
 let catChart;
+let projChart;
 
 let rawData = [];
 let filteredData = [];
@@ -372,7 +376,12 @@ let filteredData = [];
 "https://script.google.com/macros/s/AKfycbx4VvWAeXqNxsmE5trJRslVxlcv5I0PAg6nJUfycBs64z2ZP-7X0JLFw4-wyHpftYj6_g/exec";
   function renderTrendChart(){
 
-  new Chart(document.getElementById('trendChart'), {
+  if(trendChart){
+    trendChart.destroy();
+}
+
+trendChart = new Chart(
+document.getElementById('trendChart'), {
     type:'line',
     data:{
       labels:months,
@@ -742,7 +751,12 @@ liveProjects.forEach(p => {
 
 }); 
 
-new Chart(document.getElementById('projChart'), {
+if(projChart){
+    projChart.destroy();
+}
+
+projChart = new Chart(
+document.getElementById('projChart'), {
   type:'bar',
   data:{
     labels: liveProjects.map(p=>p.name),
