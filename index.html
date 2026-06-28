@@ -359,12 +359,15 @@ Chart.defaults.font.family = "'Inter', sans-serif";
 Chart.defaults.borderColor = 'rgba(226,163,59,0.12)';
  
 const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
-  let months = [];
+let months = [];
 let monthlyIncome = [];
 let monthlyExpense = [];
 let catLabels = [];
 let catData = [];
 let catChart;
+
+let rawData = [];
+let filteredData = [];
  const API_URL =
 "https://script.google.com/macros/s/AKfycbx4VvWAeXqNxsmE5trJRslVxlcv5I0PAg6nJUfycBs64z2ZP-7X0JLFw4-wyHpftYj6_g/exec";
   function renderTrendChart(){
@@ -429,12 +432,32 @@ let catChart;
   });
 
 }
-  
+function applyProjectFilter(){
+
+    const selectedProject =
+        document.getElementById('projectFilter').value;
+
+    if(selectedProject === 'All'){
+
+        filteredData = [...rawData];
+
+    } else {
+
+        filteredData = rawData.filter(row =>
+            row["Project Name"] === selectedProject
+        );
+
+    }
+
+    location.reload();
+}  
 fetch(API_URL)
 .then(r => r.json())
 .then(data => {
 
     console.log("Live Data", data);
+  rawData = data;
+filteredData = [...data];
 const projectFilter =
 document.getElementById('projectFilter');
 
@@ -456,6 +479,10 @@ projects.forEach(project => {
  `;
 
 });
+  projectFilter.addEventListener(
+  'change',
+  applyProjectFilter
+);
     let income = 0;
     let expense = 0;
     let withdrawal = 0;
